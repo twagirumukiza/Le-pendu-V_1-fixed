@@ -122,18 +122,18 @@ function endSolo() {
 // new PenduMultiplayer() ne doit jamais planter : sinon tout ce qui suit
 // (toggle de mode, bouton "Créer le salon", etc.) ne serait jamais câblé.
 let mp;
+let mpInitError = null;
 try {
   mp = new PenduMultiplayer();
 } catch (err) {
   console.error("Erreur d'initialisation multijoueur :", err);
+  mpInitError = err.message;
   mp = null;
 }
 
 const notConfiguredBox = document.getElementById("multi-not-configured");
-if (!window.PenduFirebase.configured) {
-  notConfiguredBox.textContent = window.PenduFirebase.error
-    ? "⚠️ Firebase n'a pas pu s'initialiser : " + window.PenduFirebase.error
-    : "⚠️ Firebase n'est pas encore configuré (voir js/firebase-init.js).";
+if (!window.PenduFirebase.configured || mpInitError) {
+  notConfiguredBox.textContent = "⚠️ " + (window.PenduFirebase.error || mpInitError || "Firebase n'est pas encore configuré (voir js/firebase-init.js).");
   notConfiguredBox.classList.remove("hidden");
 }
 
@@ -155,7 +155,7 @@ document.getElementById("create-room-btn").addEventListener("click", async () =>
     return;
   }
   if (!mp || !window.PenduFirebase.configured) {
-    alert("Le multijoueur n'est pas disponible : " + (window.PenduFirebase.error || "Firebase non configuré."));
+    alert("Le multijoueur n'est pas disponible : " + (window.PenduFirebase.error || mpInitError || "cause inconnue, regarde la console (bouton \"aA\" ou \"...\" > Afficher la console JS)."));
     return;
   }
   try {
@@ -172,7 +172,7 @@ document.getElementById("join-room-btn").addEventListener("click", async () => {
   const errBox = document.getElementById("join-error");
   errBox.classList.add("hidden");
   if (!mp || !window.PenduFirebase.configured) {
-    errBox.textContent = "Le multijoueur n'est pas disponible : " + (window.PenduFirebase.error || "Firebase non configuré.");
+    errBox.textContent = "Le multijoueur n'est pas disponible : " + (window.PenduFirebase.error || mpInitError || "cause inconnue.");
     errBox.classList.remove("hidden");
     return;
   }
