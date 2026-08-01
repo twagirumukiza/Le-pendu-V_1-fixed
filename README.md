@@ -11,7 +11,7 @@ js/wordbank.js        → banque de mots (thèmes + difficulté)
 js/engine.js           → moteur de jeu pur (utilisé en solo)
 js/hangman-svg.js       → dessin SVG du pendu, style marqueur à main levée
 js/firebase-init.js     → config Firebase (À REMPLIR)
-js/multiplayer.js       → logique des salons multijoueur
+js/rooms.js             → logique des salons multijoueur
 js/main.js              → routing + UI
 ```
 
