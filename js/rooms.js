@@ -4,7 +4,7 @@
 // Mode B : "Mot secret"         -> un hôte choisit le mot, les autres devinent
 // ============================================================
 
-const { normalize, MAX_ERRORS } = window.PenduUtils;
+const { normalize: normalizeWord, MAX_ERRORS: MAX_ERR } = window.PenduUtils;
 
 function genRoomCode() {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // sans lettres/chiffres ambigus
@@ -39,7 +39,7 @@ class PenduMultiplayer {
     if (mode === "A") {
       word = window.PenduWordBank.pickWord({ theme, difficulte }).mot;
     } else {
-      word = normalize(secretWord);
+      word = normalizeWord(secretWord);
     }
 
     await roomRef.set({
@@ -48,7 +48,7 @@ class PenduMultiplayer {
         theme: theme || "Tous",
         difficulte: difficulte || "Tous",
         status: "lobby",
-        maxErrors: MAX_ERRORS,
+        maxErrors: MAX_ERR,
         createdAt: firebase.database.ServerValue.TIMESTAMP,
         hostUid: this.uid
       },
@@ -137,7 +137,7 @@ class PenduMultiplayer {
 
   // Un joueur propose une lettre (uniquement si c'est son tour)
   async submitLetter(letter) {
-    letter = normalize(letter);
+    letter = normalizeWord(letter);
     const snap = await this.roomRef.get();
     const room = snap.val();
     if (room.meta.status !== "jeu") return;
@@ -190,7 +190,7 @@ class PenduMultiplayer {
       throw new Error("L'hôte ne devine pas son propre mot.");
     }
 
-    const correct = normalize(attempt) === room.word.value;
+    const correct = normalizeWord(attempt) === room.word.value;
     const updates = {};
 
     if (correct) {
@@ -210,7 +210,7 @@ class PenduMultiplayer {
 
     await this.roomRef.update(updates);
     await this.roomRef.child("log").push({
-      type: "mot", uid: this.uid, value: normalize(attempt), correct,
+      type: "mot", uid: this.uid, value: normalizeWord(attempt), correct,
       ts: firebase.database.ServerValue.TIMESTAMP
     });
   }
