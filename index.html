@@ -189,32 +189,15 @@
   <footer class="signature">— un jeu de <strong>Twagirumukiza</strong> —</footer>
 </div>
 
-<div id="script-load-diagnostic" style="display:none; background:#B23A2E; color:#fff; padding:14px; font-family:monospace; font-size:13px; white-space:pre-wrap;"></div>
-<script>
-  window.__scriptFailures = [];
-  function __showDiag(msg) {
-    window.__scriptFailures.push(msg);
-    var box = document.getElementById("script-load-diagnostic");
-    box.style.display = "block";
-    box.textContent = "⚠️ Erreurs détectées :\n" + window.__scriptFailures.join("\n");
-  }
-  function __reportScriptFail(name) { __showDiag("ÉCHEC DE CHARGEMENT : " + name); }
-  window.onerror = function (message, source, lineno, colno, error) {
-    var file = source ? source.split("/").pop() : "?";
-    __showDiag("ERREUR JS dans " + file + " (ligne " + lineno + ":" + colno + ") : " + message);
-    return false;
-  };
-</script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js" onerror="__reportScriptFail('firebase-app-compat.js (CDN gstatic.com)')"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js" onerror="__reportScriptFail('firebase-auth-compat.js (CDN gstatic.com)')"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js" onerror="__reportScriptFail('firebase-database-compat.js (CDN gstatic.com)')"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-<script src="js/wordbank.js" onerror="__reportScriptFail('js/wordbank.js')"></script>
-<script src="js/engine.js" onerror="__reportScriptFail('js/engine.js')"></script>
-<script src="js/hangman-svg.js" onerror="__reportScriptFail('js/hangman-svg.js')"></script>
-<script src="js/firebase-init.js" onerror="__reportScriptFail('js/firebase-init.js')"></script>
-<script src="js/rooms.js" onerror="__reportScriptFail('js/rooms.js')"></script>
-<script src="js/main.js" onerror="__reportScriptFail('js/main.js')"></script>
+<script src="js/wordbank.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/hangman-svg.js"></script>
+<script src="js/firebase-init.js"></script>
+<script src="js/rooms.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
-<!-- rebuild trigger 1785612511 -->
