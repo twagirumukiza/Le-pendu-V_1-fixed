@@ -235,6 +235,29 @@ document.getElementById("lobby-start-btn").addEventListener("click", async () =>
   await mp.startGame();
 });
 
+document.getElementById("lobby-share-btn").addEventListener("click", async () => {
+  const code = document.getElementById("lobby-code").textContent;
+  const url = `${location.origin}${location.pathname}?join=${code}`;
+  const btn = document.getElementById("lobby-share-btn");
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: "Le Pendu", text: `Rejoins mon salon (${code}) sur Le Pendu !`, url });
+      return;
+    } catch (e) {
+      // annulé par l'utilisateur ou non supporté, on tente le presse-papier ci-dessous
+    }
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+    const original = btn.textContent;
+    btn.textContent = "✅ Lien copié !";
+    setTimeout(() => (btn.textContent = original), 2000);
+  } catch (e) {
+    prompt("Copie ce lien pour inviter tes camarades :", url);
+  }
+});
+
 document.getElementById("lobby-leave-btn").addEventListener("click", async () => {
   await mp.leaveRoom();
   goto("screen-multi-menu");
@@ -322,3 +345,13 @@ document.getElementById("multi-word-guess-btn").addEventListener("click", () => 
   mp.submitWordGuess(input.value.trim()).catch(e => alert(e.message));
   input.value = "";
 });
+
+// ================= LIEN DE PARTAGE (?join=CODE) =================
+(function handleJoinLink() {
+  const params = new URLSearchParams(location.search);
+  const joinCode = params.get("join");
+  if (joinCode) {
+    document.getElementById("join-code").value = joinCode.toUpperCase();
+    goto("screen-multi-join");
+  }
+})();
