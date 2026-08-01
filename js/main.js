@@ -95,7 +95,9 @@ document.getElementById("solo-replay-btn").addEventListener("click", () => {
 function renderSolo() {
   document.getElementById("solo-gallows").innerHTML = PenduSVG.renderGallows(soloEngine.errors);
   document.getElementById("solo-word-display").textContent =
-    soloEngine.maskedWord.split("").join(" ");
+    soloEngine.maskedWord.split("").join("\u2009");
+  document.getElementById("solo-word-length").textContent =
+    `${soloEngine.word.length} lettre${soloEngine.word.length > 1 ? "s" : ""} · un seul mot`;
   document.getElementById("solo-errors-label").textContent =
     `Erreurs : ${soloEngine.errors} / ${PenduUtils.MAX_ERRORS}`;
 
@@ -275,8 +277,10 @@ function renderMultiGame(room) {
 
   const word = room.word.value;
   const guessed = room.guessedLetters || {};
-  const masked = word.split("").map(l => (guessed[l] ? l : "_")).join(" ");
+  const masked = word.split("").map(l => (guessed[l] ? l : "_")).join("\u2009");
   document.getElementById("multi-word-display").textContent = masked;
+  document.getElementById("multi-word-length").textContent =
+    `${word.length} lettre${word.length > 1 ? "s" : ""} · un seul mot`;
   document.getElementById("multi-errors-label").textContent =
     `Erreurs : ${room.errors || 0} / ${room.meta.maxErrors}`;
 
