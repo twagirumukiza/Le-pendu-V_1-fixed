@@ -2,7 +2,7 @@
 // LE PENDU — Contrôleur principal (routing + UI solo + UI multi)
 // ============================================================
 
-const AZERTY_ROWS = ["AZERTYUIOP", "QSDFGHJKLM", "WXCVBN"];
+const KEYBOARD_ROWS = ["ABCDEFG", "HIJKLMN", "OPQRSTU", "VWXYZ"];
 
 function goto(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
@@ -29,7 +29,7 @@ fillThemeSelect(document.getElementById("create-theme"));
 
 function buildKeyboard(container, onPress) {
   container.innerHTML = "";
-  AZERTY_ROWS.forEach(row => {
+  KEYBOARD_ROWS.forEach(row => {
     row.split("").forEach(letter => {
       const btn = document.createElement("button");
       btn.className = "key";
