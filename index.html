@@ -192,12 +192,18 @@
 <div id="script-load-diagnostic" style="display:none; background:#B23A2E; color:#fff; padding:14px; font-family:monospace; font-size:13px; white-space:pre-wrap;"></div>
 <script>
   window.__scriptFailures = [];
-  function __reportScriptFail(name) {
-    window.__scriptFailures.push(name);
+  function __showDiag(msg) {
+    window.__scriptFailures.push(msg);
     var box = document.getElementById("script-load-diagnostic");
     box.style.display = "block";
-    box.textContent = "⚠️ Fichiers qui n'ont PAS pu se charger (bloqués ou 404) :\n" + window.__scriptFailures.join("\n");
+    box.textContent = "⚠️ Erreurs détectées :\n" + window.__scriptFailures.join("\n");
   }
+  function __reportScriptFail(name) { __showDiag("ÉCHEC DE CHARGEMENT : " + name); }
+  window.onerror = function (message, source, lineno, colno, error) {
+    var file = source ? source.split("/").pop() : "?";
+    __showDiag("ERREUR JS dans " + file + " (ligne " + lineno + ":" + colno + ") : " + message);
+    return false;
+  };
 </script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js" onerror="__reportScriptFail('firebase-app-compat.js (CDN gstatic.com)')"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js" onerror="__reportScriptFail('firebase-auth-compat.js (CDN gstatic.com)')"></script>
