@@ -59,6 +59,7 @@ document.getElementById("solo-start-btn").addEventListener("click", () => {
   const picked = window.PenduWordBank.pickWord({ theme, difficulte });
   soloEngine = new PenduEngine(picked.mot);
   soloEngine.theme = picked.theme;
+  soloEngine.definition = picked.definition;
 
   document.getElementById("solo-theme-label").textContent = "Thème : " + picked.theme;
   document.getElementById("solo-replay-btn").style.display = "none";
@@ -102,11 +103,14 @@ function renderSolo() {
     `Erreurs : ${soloEngine.errors} / ${PenduUtils.MAX_ERRORS}`;
 
   const banner = document.getElementById("solo-status-banner");
+  const defLine = soloEngine.definition
+    ? `<div class="notice" style="margin-top:10px;">📖 ${soloEngine.definition}</div>`
+    : "";
   if (soloEngine.status === "won") {
-    banner.innerHTML = `<div class="status-banner won">🎉 Gagné ! Le mot était ${soloEngine.word}</div>`;
+    banner.innerHTML = `<div class="status-banner won">🎉 Gagné ! Le mot était ${soloEngine.word}</div>${defLine}`;
     endSolo();
   } else if (soloEngine.status === "lost") {
-    banner.innerHTML = `<div class="status-banner lost">💀 Perdu. Le mot était ${soloEngine.word}</div>`;
+    banner.innerHTML = `<div class="status-banner lost">💀 Perdu. Le mot était ${soloEngine.word}</div>${defLine}`;
     endSolo();
   } else {
     banner.innerHTML = "";
@@ -333,10 +337,12 @@ function renderMultiGame(room) {
   const banner = document.getElementById("multi-status-banner");
   if (room.meta.status === "fini") {
     const winner = room.winnerUid ? players[room.winnerUid]?.name : null;
+    const definition = window.PenduWordBank.definitionOf(word);
+    const defLine = definition ? `<div class="notice" style="margin-top:10px;">📖 ${definition}</div>` : "";
     if (winner) {
-      banner.innerHTML = `<div class="status-banner won">🎉 ${winner} a gagné ! Le mot était ${word}</div>`;
+      banner.innerHTML = `<div class="status-banner won">🎉 ${winner} a gagné ! Le mot était ${word}</div>${defLine}`;
     } else {
-      banner.innerHTML = `<div class="status-banner lost">💀 Perdu ! Le mot était ${word}</div>`;
+      banner.innerHTML = `<div class="status-banner lost">💀 Perdu ! Le mot était ${word}</div>${defLine}`;
     }
   } else {
     banner.innerHTML = "";
